@@ -2308,7 +2308,7 @@ namespace FastColoredTextBoxNS
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            base.OnHandleCreated(e);
+            //base.OnHandleCreated(e);
             foreach (var timer in new List<Timer>(timersToReset.Keys))
                 ResetTimer(timer);
             timersToReset.Clear();
