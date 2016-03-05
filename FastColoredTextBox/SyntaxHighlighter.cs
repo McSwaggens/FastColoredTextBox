@@ -185,7 +185,7 @@ namespace FastColoredTextBoxNS
         {
             switch (language)
             {
-                case Language.CrocScript:
+				case Language.SnapScript:
                     CSharpSyntaxHighlight(range);
                     break;
                 case Language.PASM:
@@ -226,7 +226,7 @@ namespace FastColoredTextBoxNS
             Language language = tb.Language;
             switch (language)
             {
-                case Language.CrocScript:
+			case Language.SnapScript:
                     CSharpAutoIndentNeeded(sender, args);
                     break;
                 case Language.PASM:
@@ -622,7 +622,7 @@ namespace FastColoredTextBoxNS
                     FunctionsStyle = OperatorStyle;
                     CommentTagStyle = GrayStyle;
                     break;
-                case Language.CrocScript:
+			case Language.SnapScript:
                     StringStyle = BrownStyle;
                     CommentStyle = GreenStyle;
                     NumberStyle = MagentaStyle;

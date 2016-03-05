@@ -6,7 +6,7 @@ namespace FastColoredTextBoxNS
 {
     public enum Language
     {
-        CrocScript,
+        SnapScript,
         PASM,
         Custom,
         CSharp,
