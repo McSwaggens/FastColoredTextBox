@@ -10,6 +10,8 @@ namespace FastColoredTextBoxNS
 {
     public class SyntaxHighlighter : IDisposable
     {
+
+        public string StaticClasses;
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
 
         public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
@@ -20,7 +22,7 @@ namespace FastColoredTextBoxNS
             FontStyle.Regular);
 
         public readonly Style BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
-        public readonly Style ClassStyle = new TextStyle(new Pen(Color.FromArgb(160, 60, 190)).Brush, null, FontStyle.Bold | FontStyle.Italic);
+        public readonly Style ClassStyle = new TextStyle(new Pen(Color.FromArgb(217, 72, 125)).Brush, null, FontStyle.Bold | FontStyle.Italic);
 
         public readonly Style PreCompileStyle = new TextStyle(new Pen(Color.FromArgb(100, 100, 100)).Brush, null, FontStyle.Regular);
 
@@ -41,10 +43,19 @@ namespace FastColoredTextBoxNS
         public readonly Style MaroonStyle = new TextStyle(new Pen(Color.FromArgb(206, 145, 120)).Brush, null,
             FontStyle.Regular);
 
-        public readonly Style OperatorStyle = new TextStyle(new Pen(Color.FromArgb(255, 0, 255)).Brush, null,
-            FontStyle.Regular);
+        public readonly Style OperatorStyle = new TextStyle(new Pen(Color.FromArgb(217, 72, 125)).Brush, null,
+            FontStyle.Bold | FontStyle.Italic);
 
-        public readonly Style RedStyle = new TextStyle(new Pen(Color.FromArgb(206, 145, 120)).Brush, null,
+        public readonly Style StaticClassStyle = new TextStyle(new Pen(Color.FromArgb(165, 194, 97)).Brush, null,
+            FontStyle.Bold);
+
+        public readonly Style PASMNumberStyle = new TextStyle(new Pen(Color.FromArgb(242, 180, 65)).Brush, null,
+            FontStyle.Italic | FontStyle.Bold);
+
+        public readonly Style PASMPreNumStyle = new TextStyle(new Pen(Color.FromArgb(255, 5, 5)).Brush, null,
+            FontStyle.Italic | FontStyle.Bold);
+
+        public readonly Style RedStyle = new TextStyle(new Pen(Color.FromArgb(217, 72, 125)).Brush, null,
             FontStyle.Regular);
 
         protected Regex BASICFunctionsRegex;
@@ -101,9 +112,13 @@ namespace FastColoredTextBoxNS
 
         protected Regex PASMFunctionsRegex;
 
+        protected Regex PASMStaticClassRegex;
+
         protected Regex PASMKeywordRegex;
 
         protected Regex PASMStringRegex;
+
+        protected Regex PASMPreNumRegex;
 
         public static RegexOptions RegexCompiledOption
         {
@@ -186,7 +201,7 @@ namespace FastColoredTextBoxNS
             switch (language)
             {
 				case Language.SnapScript:
-                    CSharpSyntaxHighlight(range);
+                    SnapScriptSyntaxHighlight(range);
                     break;
                 case Language.PASM:
                     PASMSyntaxHighlight(range);
@@ -658,7 +673,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        public virtual void CSharpSyntaxHighlight(Range range)
+        public virtual void SnapScriptSyntaxHighlight(Range range)
         {
             range.tb.CommentPrefix = "//";
             range.tb.LeftBracket = '(';
@@ -801,14 +816,16 @@ namespace FastColoredTextBoxNS
             range.SetStyle(CommentStyle, LuaCommentRegex1);
             range.SetStyle(CommentStyle, LuaCommentRegex2);
             range.SetStyle(CommentStyle, LuaCommentRegex3);
-            range.SetStyle(NumberStyle, LuaNumberRegex);
+            range.SetStyle(PASMNumberStyle, LuaNumberRegex);
+            range.SetStyle(PASMNumberStyle, PASMPreNumRegex);
             range.SetStyle(KeywordStyle, PASMKeywordRegex);
             range.SetStyle(FunctionsStyle, PASMFunctionsRegex);
+            range.SetStyle(StaticClassStyle, PASMStaticClassRegex);
             range.ClearFoldingMarkers();
             range.SetFoldingMarkers("#\\[\\[", "\\]\\]");
         }
 
-        protected void InitPASMRegex()
+        public void InitPASMRegex()
         {
             PASMStringRegex = new Regex("\"\"|''|\".*?[^\\\\]\"|'.*?[^\\\\]'", RegexCompiledOption);
             LuaCommentRegex1 = new Regex("#.*$", RegexOptions.Multiline | RegexCompiledOption);
@@ -818,8 +835,11 @@ namespace FastColoredTextBoxNS
                 RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);
             LuaNumberRegex = new Regex("\\b\\d+[\\.]?\\d*([eE]\\-?\\d+)?[lLdDfF]?\\b|\\b0x[a-fA-F\\d]+\\b",
                 RegexCompiledOption);
-            PASMKeywordRegex = new Regex("\\b(set|mov|pt|calib|re|call|if|im)\\b", RegexCompiledOption);
-            PASMFunctionsRegex = new Regex("\\b(BYTE|INT16|INT32|INT64|MATH|QMATH|VOR|VOP|VORL|MALLOC)\\b", RegexCompiledOption);
+            PASMPreNumRegex = new Regex(":\\d",
+                RegexCompiledOption);
+            PASMKeywordRegex = new Regex("\\b(set|mov|pt|calib|re|call|if|im|malloc_c|malloc_p|malloc_d)\\b", RegexCompiledOption);
+            PASMFunctionsRegex = new Regex($"\\b(BYTE|INT16|INT32|INT64|MATH|QMATH|VOR|VOP|VORL)\\b", RegexCompiledOption);
+            PASMStaticClassRegex = new Regex($"\\b({StaticClasses})\\b", RegexCompiledOption);
         }
 
         protected void PASMAutoIndentNeeded(object sender, AutoIndentEventArgs args)

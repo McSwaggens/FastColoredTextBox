@@ -986,7 +986,7 @@ namespace FastColoredTextBoxNS
             {
                ClearStyle(tb.GetStyleIndexMask(styles));
             }
-            catch { ;}
+            catch {}
         }
 
         /// <summary>
