@@ -98,8 +98,6 @@ namespace FastColoredTextBoxNS
         protected Regex LuaNumberRegex;
 
         protected Regex LuaStringRegex;
-
-<<<<<<< HEAD
         protected Regex PHPCommentRegex1,
                       PHPCommentRegex2,
                       PHPCommentRegex3;
@@ -129,13 +127,11 @@ namespace FastColoredTextBoxNS
         protected Regex VBKeywordRegex;
         protected Regex VBNumberRegex;
         protected Regex VBStringRegex;
-=======
         protected Regex PASMFunctionsRegex;
 
         protected Regex PASMKeywordRegex;
 
         protected Regex PASMStringRegex;
->>>>>>> refs/remotes/origin/PashLang-FCTB
 
         public static RegexOptions RegexCompiledOption
         {
@@ -728,7 +724,7 @@ namespace FastColoredTextBoxNS
                 }
             }
             range.ClearFoldingMarkers();
-<<<<<<< HEAD
+
             //set folding markers
             range.SetFoldingMarkers("<head", "</head>", RegexOptions.IgnoreCase);
             range.SetFoldingMarkers("<body", "</body>", RegexOptions.IgnoreCase);
@@ -998,8 +994,7 @@ namespace FastColoredTextBoxNS
             //set folding markers
             range.SetFoldingMarkers("{", "}"); //allow to collapse brackets block
             range.SetFoldingMarkers(@"/\*", @"\*/"); //allow to collapse comment block
-=======
->>>>>>> refs/remotes/origin/PashLang-FCTB
+
         }
 
         protected void InitJScriptRegex()
