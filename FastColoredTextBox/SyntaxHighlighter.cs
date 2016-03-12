@@ -112,7 +112,7 @@ namespace FastColoredTextBoxNS
 
         protected Regex PASMFunctionsRegex;
 
-        protected Regex PASMStaticClassRegex;
+        protected Regex StaticClassRegex;
 
         protected Regex PASMKeywordRegex;
 
@@ -205,9 +205,6 @@ namespace FastColoredTextBoxNS
                     break;
                 case Language.PASM:
                     PASMSyntaxHighlight(range);
-                    break;
-                case Language.JS:
-                    JScriptSyntaxHighlight(range);
                     break;
                 case Language.Lua:
                     LuaSyntaxHighlight(range);
@@ -566,7 +563,7 @@ namespace FastColoredTextBoxNS
             };
         }
 
-        protected void InitCShaprRegex()
+        protected void InitSnapScriptRegex()
         {
             CSharpStringRegex =
             new Regex(
@@ -614,11 +611,12 @@ namespace FastColoredTextBoxNS
                 RegexCompiledOption);
             CSharpOmitableNameRegex = new Regex("\\b(omitable)\\b",
                 RegexCompiledOption);
-            CSharpPreCompileSpaceNameRegex = new Regex("#import|#declare|#enforce",
+            CSharpPreCompileSpaceNameRegex = new Regex("import|declare|enforce",
                 RegexCompiledOption);
+            StaticClassRegex = new Regex($"\\b({StaticClasses})\\b", RegexCompiledOption);
             CSharpKeywordRegex =
                 new Regex(
-                    "\\b(self|operator|char|goto|new|for|if|while|void|null|private|public|static|pasm|int16|int32|int64|uint16|uint32|uint64|byte|sbyte|assign|true|false)\\b",
+                    "\\b(self|operator|char|goto|new|for|if|while|void|null|private|public|static|pasm|short|int|long|uint16|uint32|uint64|byte|sbyte|assign|true|false)\\b",
                     RegexCompiledOption);
         }
 
@@ -687,8 +685,9 @@ namespace FastColoredTextBoxNS
             var flag = CSharpStringRegex == null;
             if (flag)
             {
-                InitCShaprRegex();
+                InitSnapScriptRegex();
             }
+            range.SetStyle(StaticClassStyle, StaticClassRegex);
             range.SetStyle(StringStyle, CSharpStringRegex);
             range.SetStyle(CommentStyle, CSharpCommentRegex1);
             range.SetStyle(CommentStyle, CSharpCommentRegex2);
@@ -711,47 +710,6 @@ namespace FastColoredTextBoxNS
                 }
             }
             range.ClearFoldingMarkers();
-        }
-
-        protected void InitJScriptRegex()
-        {
-            JScriptStringRegex = new Regex("\"\"|''|\".*?[^\\\\]\"|'.*?[^\\\\]'", RegexCompiledOption);
-            JScriptCommentRegex1 = new Regex("//.*$", RegexOptions.Multiline | RegexCompiledOption);
-            JScriptCommentRegex2 = new Regex("(/\\*.*?\\*/)|(/\\*.*)", RegexOptions.Singleline | RegexCompiledOption);
-            JScriptCommentRegex3 = new Regex("(/\\*.*?\\*/)|(.*\\*/)",
-                RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);
-            JScriptNumberRegex = new Regex("\\b\\d+[\\.]?\\d*([eE]\\-?\\d+)?[lLdDfF]?\\b|\\b0x[a-fA-F\\d]+\\b",
-                RegexCompiledOption);
-            JScriptKeywordRegex =
-                new Regex(
-                    "\\b(true|false|break|case|catch|const|continue|default|delete|do|else|export|for|function|if|in|instanceof|new|null|return|switch|this|throw|try|var|void|while|with|typeof)\\b",
-                    RegexCompiledOption);
-        }
-
-        public virtual void JScriptSyntaxHighlight(Range range)
-        {
-            range.tb.CommentPrefix = "//";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
-            range.tb.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
-            range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle);
-            var flag = JScriptStringRegex == null;
-            if (flag)
-            {
-                InitJScriptRegex();
-            }
-            range.SetStyle(StringStyle, JScriptStringRegex);
-            range.SetStyle(CommentStyle, JScriptCommentRegex1);
-            range.SetStyle(CommentStyle, JScriptCommentRegex2);
-            range.SetStyle(CommentStyle, JScriptCommentRegex3);
-            range.SetStyle(NumberStyle, JScriptNumberRegex);
-            range.SetStyle(KeywordStyle, JScriptKeywordRegex);
-            range.ClearFoldingMarkers();
-            range.SetFoldingMarkers("{", "}");
-            range.SetFoldingMarkers("/\\*", "\\*/");
         }
 
         protected void InitLuaRegex()
@@ -820,7 +778,7 @@ namespace FastColoredTextBoxNS
             range.SetStyle(PASMNumberStyle, PASMPreNumRegex);
             range.SetStyle(KeywordStyle, PASMKeywordRegex);
             range.SetStyle(FunctionsStyle, PASMFunctionsRegex);
-            range.SetStyle(StaticClassStyle, PASMStaticClassRegex);
+            range.SetStyle(StaticClassStyle, StaticClassRegex);
             range.ClearFoldingMarkers();
             range.SetFoldingMarkers("#\\[\\[", "\\]\\]");
         }
@@ -838,8 +796,8 @@ namespace FastColoredTextBoxNS
             PASMPreNumRegex = new Regex(":\\d",
                 RegexCompiledOption);
             PASMKeywordRegex = new Regex("\\b(set|mov|pt|calib|re|call|if|im|malloc_c|malloc_p|malloc_d)\\b", RegexCompiledOption);
-            PASMFunctionsRegex = new Regex($"\\b(BYTE|INT16|INT32|INT64|MATH|QMATH|VOR|VOP|VORL)\\b", RegexCompiledOption);
-            PASMStaticClassRegex = new Regex($"\\b({StaticClasses})\\b", RegexCompiledOption);
+            PASMFunctionsRegex = new Regex($"\\b(BYTE|INT16|INT32|INT64|MATH|QMATH|VOR|VOP|VORL|PAR|PARC)\\b", RegexCompiledOption);
+            StaticClassRegex = new Regex($"\\b({StaticClasses})\\b", RegexCompiledOption);
         }
 
         protected void PASMAutoIndentNeeded(object sender, AutoIndentEventArgs args)
