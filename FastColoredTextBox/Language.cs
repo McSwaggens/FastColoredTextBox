@@ -6,12 +6,8 @@ namespace FastColoredTextBoxNS
 {
     public enum Language
     {
-        SnapScript,
+        Puffin,
         PASM,
         Custom,
-        CSharp,
-        PHP,
-        JS,
-        Lua
     }
 }
