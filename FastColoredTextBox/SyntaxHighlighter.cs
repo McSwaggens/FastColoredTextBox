@@ -444,12 +444,12 @@ namespace FastColoredTextBoxNS
             PuffinNumberRegex = new Regex(@"\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b",
                                           RegexCompiledOption);
             PuffinAttributeRegex = new Regex(@"^\s*(?<range>\[.+?\])\s*$", RegexOptions.Multiline | RegexCompiledOption);
-            PuffinClassNameRegex = new Regex(@"\b(class|struct|enum|interface)\s+(?<range>\w+?)\b", RegexCompiledOption);
+            PuffinClassNameRegex = new Regex(@"\b(class|struct|enum|interface|omitable)\s+(?<range>\w+?)\b", RegexCompiledOption);
             PuffinKeywordRegex =
                 new Regex(
-                    @"\b(public|private|protected|static|int|bool|long|short|byte|char|float|double|dataset|null|nullptr|void|if|for|while|do|return|switch|case|__EOF|__pasm|enum|class|struct|extern|interface|abstract|sealed|else|break|contunue|uint|ubyte|ulong|ushort|extends)\b",
+                    @"\b(public|private|protected|static|int|bool|long|short|byte|char|float|double|dataset|null|nullptr|void|if|for|while|do|return|switch|case|__EOF|__pasm|enum|class|struct|extern|interface|abstract|sealed|else|break|contunue|uint|ubyte|ulong|ushort|extends|new|ref)\b",
                     RegexCompiledOption);
-            PuffinPreCompileRegex = new Regex("#(import|region|endregion)?", RegexCompiledOption);
+            PuffinPreCompileRegex = new Regex("#(import|region|endregion|include)?", RegexCompiledOption);
             PuffinImportLibraryRegex = new Regex("(?<=<)(.*?)(?=>)");
         }
 
@@ -581,7 +581,7 @@ namespace FastColoredTextBoxNS
             PASMPreNumRegex = new Regex(":\\d",
                 RegexCompiledOption);
             PASMKeywordRegex = new Regex("\\b(set|mov|pt|calib|re|call|if|im|malloc_c|malloc_p|malloc_d|free)\\b", RegexCompiledOption);
-            PASMFunctionsRegex = new Regex($"\\b(BYTE|SINT16|SINT32|SINT64|INT16|INT32|INT64|QMATH|VOR|VOP|VORL|PAR|PARC|PTR|FLOAT|DOUBLE|MATHF)\\b", RegexCompiledOption);
+            PASMFunctionsRegex = new Regex($"\\b(BYTE|SINT16|SINT32|SINT64|INT16|INT32|INT64|QMATH|VOR|VOP|VORL|PAR|PARC|PTR|FLOAT|DOUBLE|MATHF|IP)\\b", RegexCompiledOption);
             StaticClassRegex = new Regex($"\\b({StaticClasses})\\b", RegexCompiledOption);
         }
 
